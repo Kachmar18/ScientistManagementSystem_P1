@@ -1,0 +1,54 @@
+3
+1
+2
+John Doe
+Jane Smith
+Science Journal
+Advanced Research
+2023
+5
+3
+3
+2
+Mathematics
+Physics
+600
+2
+CS-101
+CS-102
+10
+Smith
+John
+Robert
+1
+1
+Marie Curie
+Physics Today
+Radioactive Substances
+1898
+8
+2
+4
+2
+Physics
+Chemistry
+750
+1
+PhD-Group
+20
+Curie
+Marie
+SkЕ‚odowska
+0
+2
+0
+2
+1
+ООП
+12
+1
+КНС-11
+12
+Качмар
+Богдана
+Богданівна

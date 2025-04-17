@@ -1,0 +1,9 @@
+#pragma once
+
+enum class Degree {
+    NONE,
+    CANDIDATE_TECHNICAL,
+    CANDIDATE_PHYSICAL_MATHEMATICAL,
+    PHD,
+    DOCTOR_TECHNICAL
+};
