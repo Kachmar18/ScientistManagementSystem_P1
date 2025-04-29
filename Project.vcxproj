@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{340b70b3-6b30-4ccc-a092-a1cd93e1535b}</ProjectGuid>
-    <RootNamespace>ScientistManagementSystem</RootNamespace>
+    <ProjectGuid>{5f38d73b-9bca-40db-b232-f16b7f3e1234}</ProjectGuid>
+    <RootNamespace>Project</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,19 +127,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Article.cpp" />
-    <ClCompile Include="ResearchTeachingStaff.cpp" />
-    <ClCompile Include="Scientist.cpp" />
-    <ClCompile Include="ScientistManagementSystem.cpp" />
-    <ClCompile Include="Teacher.cpp" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="AcademicDegree.h" />
     <ClInclude Include="Article.h" />
-    <ClInclude Include="Degree.h" />
-    <ClInclude Include="ResearchStaffContainer.h" />
     <ClInclude Include="ResearchTeachingStaff.h" />
     <ClInclude Include="Scientist.h" />
+    <ClInclude Include="StaffContainer.h" />
     <ClInclude Include="Teacher.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Article.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ResearchTeachingStaff.cpp" />
+    <ClCompile Include="Scientist.cpp" />
+    <ClCompile Include="StaffContainer.cpp" />
+    <ClCompile Include="Teacher.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

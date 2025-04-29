@@ -1,18 +1,27 @@
 #include "ResearchTeachingStaff.h"
+#include <sstream>
+#include <iostream>
 
-
+// Constructor
 ResearchTeachingStaff::ResearchTeachingStaff(
-    const std::vector<Article>& pubs, int confPres, int patents, Degree degree,
-    const std::vector<std::string>& disc, int hours,
-    const std::vector<std::string>& grps, int experience,
-    const std::string& lName, const std::string& fName,
-    const std::string& mName)
-    : Scientist(pubs, confPres, patents, degree),
-    Teacher(disc, hours, grps, experience),
-    lastName(lName),
-    firstName(fName),
-    middleName(mName) {}
+    const std::string& last,
+    const std::string& first,
+    const std::string& middle,
+    const std::vector<Article>& pubs,
+    int presentations,
+    int patents,
+    AcademicDegree deg,
+    const std::vector<std::string>& disc,
+    unsigned int hours,
+    const std::vector<std::string>& grps,
+    unsigned int exp
+) : Scientist(pubs, presentations, patents, deg),
+Teacher(disc, hours, grps, exp),
+lastName(last),
+firstName(first),
+middleName(middle) {}
 
+// Copy constructor
 ResearchTeachingStaff::ResearchTeachingStaff(const ResearchTeachingStaff& other)
     : Scientist(other),
     Teacher(other),
@@ -20,6 +29,7 @@ ResearchTeachingStaff::ResearchTeachingStaff(const ResearchTeachingStaff& other)
     firstName(other.firstName),
     middleName(other.middleName) {}
 
+// Move constructor
 ResearchTeachingStaff::ResearchTeachingStaff(ResearchTeachingStaff&& other) noexcept
     : Scientist(std::move(other)),
     Teacher(std::move(other)),
@@ -27,8 +37,10 @@ ResearchTeachingStaff::ResearchTeachingStaff(ResearchTeachingStaff&& other) noex
     firstName(std::move(other.firstName)),
     middleName(std::move(other.middleName)) {}
 
+// Destructor
 ResearchTeachingStaff::~ResearchTeachingStaff() {}
 
+// Assignment operators
 ResearchTeachingStaff& ResearchTeachingStaff::operator=(const ResearchTeachingStaff& other) {
     if (this != &other) {
         Scientist::operator=(other);
@@ -51,175 +63,162 @@ ResearchTeachingStaff& ResearchTeachingStaff::operator=(ResearchTeachingStaff&& 
     return *this;
 }
 
-std::string ResearchTeachingStaff::getLastName() const {
-    return lastName;
-}
-
-std::string ResearchTeachingStaff::getFirstName() const {
-    return firstName;
-}
-
-std::string ResearchTeachingStaff::getMiddleName() const {
-    return middleName;
-}
-
-void ResearchTeachingStaff::setLastName(const std::string& lName) {
-    lastName = lName;
-}
-
-void ResearchTeachingStaff::setFirstName(const std::string& fName) {
-    firstName = fName;
-}
-
-void ResearchTeachingStaff::setMiddleName(const std::string& mName) {
-    middleName = mName;
-}
-
-std::ostream& operator<<(std::ostream& os, const ResearchTeachingStaff& staff) {
-    os << "Name: " << staff.firstName << " " << staff.middleName << " " << staff.lastName << "\n"
-        << "Teaching Info:\n"
-        << "  Disciplines: ";
-    for (const auto& disc : staff.getDisciplines()) {
-        os << disc << ", ";
-    }
-    os << "\n  Annual Hours: " << staff.getAnnualHours()
-        << "\n  Years of Experience: " << staff.getYearsOfExperience()
-        << "\nResearch Info:\n"
-        << "  Publications: " << staff.getPublications().size()
-        << "\n  Conference Presentations: " << staff.getConferencePresentations()
-        << "\n  Patents: " << staff.getPatentsCount()
-        << "\n  Degree: ";
-
-    switch (staff.getAcademicDegree()) {
-    case Degree::NONE: os << "None"; break;
-    case Degree::CANDIDATE_TECHNICAL: os << "Candidate of Technical Sciences"; break;
-    case Degree::CANDIDATE_PHYSICAL_MATHEMATICAL: os << "Candidate of Physical-Mathematical Sciences"; break;
-    case Degree::PHD: os << "PhD"; break;
-    case Degree::DOCTOR_TECHNICAL: os << "Doctor of Technical Sciences"; break;
-    }
-
+// In ResearchTeachingStaff.cpp
+std::ostream& operator<<(std::ostream& os, const ResearchTeachingStaff& rts) {
+    os << "Name: " << rts.getFullName() << "\n";
+    os << "--- Scientific Information ---\n";
+    os << static_cast<const Scientist&>(rts);
+    os << "\n--- Teaching Information ---\n";
+    os << static_cast<const Teacher&>(rts);
     return os;
 }
 
-std::istream& operator>>(std::istream& is, ResearchTeachingStaff& staff) {
-    std::cout << "Enter first name: ";
-    is >> staff.firstName;
+std::istream& operator>>(std::istream& is, ResearchTeachingStaff& rts) {
+    std::cout << "Enter personal information:\n";
+    std::cout << "Last name: ";
+    std::getline(is, rts.lastName);
+    std::cout << "First name: ";
+    std::getline(is, rts.firstName);
+    std::cout << "Middle name: ";
+    std::getline(is, rts.middleName);
 
-    std::cout << "Enter middle name: ";
-    is >> staff.middleName;
-
-    std::cout << "Enter last name: ";
-    is >> staff.lastName;
-
-    // Note: For complex objects, you would need more sophisticated input handling
-    // This is a simplified version
+    // Call base class stream operators
+    is >> static_cast<Scientist&>(rts);
+    is.ignore(); // Clear newline
+    is >> static_cast<Teacher&>(rts);
 
     return is;
 }
 
-void ResearchTeachingStaff::serialize(std::ofstream& out) const {
-    // Use protected accessors instead of direct member access
-    const auto& pubs = getPublicationsInternal();
-    out << pubs.size() << "\n";
-    for (const auto& pub : pubs) {
-        out << pub.getAuthors().size() << "\n";
-        for (const auto& author : pub.getAuthors()) {
-            out << author << "\n";
-        }
-        out << pub.getPublicationName() << "\n";
-        out << pub.getArticleTitle() << "\n";
-        out << pub.getYear() << "\n";
-    }
-    out << getConferencePresentationsInternal() << "\n";
-    out << getPatentsCountInternal() << "\n";
-    out << static_cast<int>(getAcademicDegreeInternal()) << "\n";
+// Getters
+std::string ResearchTeachingStaff::getLastName() const { return lastName; }
+std::string ResearchTeachingStaff::getFirstName() const { return firstName; }
+std::string ResearchTeachingStaff::getMiddleName() const { return middleName; }
 
-    // Teacher part
-    const auto& discs = getDisciplinesInternal();
-    out << discs.size() << "\n";
-    for (const auto& disc : discs) {
-        out << disc << "\n";
-    }
-    out << getAnnualHoursInternal() << "\n";
+// Setters
+void ResearchTeachingStaff::setLastName(const std::string& last) { lastName = last; }
+void ResearchTeachingStaff::setFirstName(const std::string& first) { firstName = first; }
+void ResearchTeachingStaff::setMiddleName(const std::string& middle) { middleName = middle; }
 
-    const auto& grps = getGroupsInternal();
-    out << grps.size() << "\n";
-    for (const auto& group : grps) {
-        out << group << "\n";
-    }
-    out << getYearsOfExperienceInternal() << "\n";
-
-    // Personal info
-    out << lastName << "\n";
-    out << firstName << "\n";
-    out << middleName << "\n";
+// Combined information
+std::string ResearchTeachingStaff::getFullName() const {
+    std::ostringstream oss;
+    oss << lastName << " " << firstName << " " << middleName;
+    return oss.str();
 }
 
-ResearchTeachingStaff ResearchTeachingStaff::deserialize(std::ifstream& in) {
-    // Deserialize Scientist part
-    size_t pubCount;
-    in >> pubCount;
+
+void ResearchTeachingStaff::displayInfo() const {
+    std::cout << "=== Research Teaching Staff ===\n";
+    std::cout << "Name: " << getFullName() << "\n";
+
+    // Call base class implementations
+    Scientist::displayInfo();
+    Teacher::displayInfo();
+}
+
+
+
+void ResearchTeachingStaff::serialize(std::ostream& os) const {
+    // Personal info
+    os << lastName << "\n" << firstName << "\n" << middleName << "\n";
+
+    // Scientist info
+    os << getPublications().size() << "\n";
+    for (const auto& pub : getPublications()) {
+        os << pub.getAuthors().size() << "\n";
+        for (const auto& author : pub.getAuthors()) {
+            os << author << "\n";
+        }
+        os << pub.getJournalTitle() << "\n";
+        os << pub.getArticleTitle() << "\n";
+        os << pub.getPublicationYear() << "\n";
+    }
+    os << getConferencePresentations() << "\n";
+    os << getPatentsCount() << "\n";
+    os << static_cast<int>(getAcademicDegree()) << "\n";
+
+    // Teacher info
+    os << getDisciplines().size() << "\n";
+    for (const auto& disc : getDisciplines()) {
+        os << disc << "\n";
+    }
+    os << getYearlyHours() << "\n";
+    os << getGroups().size() << "\n";
+    for (const auto& group : getGroups()) {
+        os << group << "\n";
+    }
+    os << getWorkExperience() << "\n";
+}
+
+void ResearchTeachingStaff::deserialize(std::istream& is) {
+    // Personal info
+    std::getline(is, lastName);
+    std::getline(is, firstName);
+    std::getline(is, middleName);
+
+    // Scientist info
     std::vector<Article> publications;
-    for (size_t i = 0; i < pubCount; ++i) {
-        size_t authorCount;
-        in >> authorCount;
-        in.ignore(); // Skip newline
+    int pubCount;
+    is >> pubCount;
+    is.ignore();
+    for (int i = 0; i < pubCount; ++i) {
+        int authorCount;
+        is >> authorCount;
+        is.ignore();
         std::vector<std::string> authors;
-        for (size_t j = 0; j < authorCount; ++j) {
+        for (int j = 0; j < authorCount; ++j) {
             std::string author;
-            std::getline(in, author);
+            std::getline(is, author);
             authors.push_back(author);
         }
-        std::string pubName, articleTitle;
+        std::string journal, title;
         int year;
-        std::getline(in, pubName);
-        std::getline(in, articleTitle);
-        in >> year;
-        in.ignore(); // Skip newline
-        publications.emplace_back(authors, pubName, articleTitle, year);
+        std::getline(is, journal);
+        std::getline(is, title);
+        is >> year;
+        is.ignore();
+        publications.emplace_back(authors, journal, title, year);
     }
-    int confPres, patents;
-    int degreeInt;
-    in >> confPres >> patents >> degreeInt;
-    in.ignore();
-    Degree degree = static_cast<Degree>(degreeInt);
+    setPublications(publications);
 
-    // Deserialize Teacher part
-    size_t discCount;
-    in >> discCount;
-    in.ignore();
+    int presentations, patents, degree;
+    is >> presentations >> patents >> degree;
+    is.ignore();
+    setConferencePresentations(presentations);
+    setPatentsCount(patents);
+    setAcademicDegree(static_cast<AcademicDegree>(degree));
+
+    // Teacher info
     std::vector<std::string> disciplines;
-    for (size_t i = 0; i < discCount; ++i) {
+    int discCount;
+    is >> discCount;
+    is.ignore();
+    for (int i = 0; i < discCount; ++i) {
         std::string disc;
-        std::getline(in, disc);
+        std::getline(is, disc);
         disciplines.push_back(disc);
     }
-    int hours;
-    in >> hours;
-    in.ignore();
+    setDisciplines(disciplines);
 
-    size_t groupCount;
-    in >> groupCount;
-    in.ignore();
+    unsigned int hours;
+    is >> hours;
+    is.ignore();
+    setYearlyHours(hours);
+
     std::vector<std::string> groups;
-    for (size_t i = 0; i < groupCount; ++i) {
+    int groupCount;
+    is >> groupCount;
+    is.ignore();
+    for (int i = 0; i < groupCount; ++i) {
         std::string group;
-        std::getline(in, group);
+        std::getline(is, group);
         groups.push_back(group);
     }
-    int experience;
-    in >> experience;
-    in.ignore();
+    setGroups(groups);
 
-    // Deserialize personal info
-    std::string lName, fName, mName;
-    std::getline(in, lName);
-    std::getline(in, fName);
-    std::getline(in, mName);
-
-    return ResearchTeachingStaff(
-        publications, confPres, patents, degree,
-        disciplines, hours, groups, experience,
-        lName, fName, mName
-    );
+    unsigned int exp;
+    is >> exp;
+    is.ignore();
+    setWorkExperience(exp);
 }

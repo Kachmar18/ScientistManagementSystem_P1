@@ -1,41 +1,58 @@
-2
+3
+Petrov
+Ivan
+Ivanovich
 1
-2
-John Doe
-Jane Smith
+1
+Petrov
 Science Journal
 Advanced Research
-2023
+2022
 5
 3
 3
 2
 Mathematics
 Physics
-600
-2
-CS-101
-CS-102
+500
+1
+Group A
 10
-Smith
-John
-Robert
+Sydorenko
+Olena
+Vasylivna
 1
 1
-Marie Curie
-Physics Today
-Radioactive Substances
-1898
-8
-2
+Sydorenko
+Bio Journal
+Biology Research
+2021
+3
+1
 4
 2
-Physics
+Biology
 Chemistry
-750
+450
 1
-PhD-Group
-20
-Curie
-Marie
-Skłodowska
+Group B
+15
+Koval
+Mykola
+Petrovych
+1
+1
+Koval
+Tech Journal
+Innovations
+2023
+7
+5
+1
+2
+Computer Science
+Mathematics
+600
+1
+Group C
+8

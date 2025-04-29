@@ -1,62 +1,86 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <iostream> 
-#include <ostream>
 
 class Teacher {
-    friend class ResearchTeachingStaff;
 private:
     std::vector<std::string> disciplines;
-    int annualHours;
+    unsigned int yearlyHours;
     std::vector<std::string> groups;
-    int yearsOfExperience;
+    unsigned int workExperience; // in years
 
-protected:
-    // Add these protected methods for derived classes
-    const std::vector<std::string>& getDisciplinesInternal() const { return disciplines; }
-    int getAnnualHoursInternal() const { return annualHours; }
-    const std::vector<std::string>& getGroupsInternal() const { return groups; }
-    int getYearsOfExperienceInternal() const { return yearsOfExperience; }
-    
 public:
-    Teacher(const std::vector<std::string>& disc, int hours,
-        const std::vector<std::string>& grps, int experience);
+    // Default constructor
+    Teacher();
 
+    // Parameterized constructor
+    Teacher(const std::vector<std::string>& disc, unsigned int hours,
+        const std::vector<std::string>& grps, unsigned int exp);
+
+    // Copy constructor
     Teacher(const Teacher& other);
 
+    // Move constructor
     Teacher(Teacher&& other) noexcept;
 
-    virtual ~Teacher() = default;
+    // Destructor
+    ~Teacher();
 
+
+
+
+
+
+
+
+    // Assignment operators
     Teacher& operator=(const Teacher& other);
     Teacher& operator=(Teacher&& other) noexcept;
 
+    // Function call operator for setting fields
+    Teacher& operator()(const std::vector<std::string>& disc, unsigned int hours,
+        const std::vector<std::string>& grps, unsigned int exp);
+
+    // Stream operators
+    friend std::ostream& operator<<(std::ostream& os, const Teacher& teacher);
+    friend std::istream& operator>>(std::istream& is, Teacher& teacher);
+
+
+
+
+
+
+
+
+
+
+    // Getters
     const std::vector<std::string>& getDisciplines() const;
-    int getAnnualHours() const;
+    unsigned int getYearlyHours() const;
     const std::vector<std::string>& getGroups() const;
-    int getYearsOfExperience() const;
+    unsigned int getWorkExperience() const;
 
+    // Setters
     void setDisciplines(const std::vector<std::string>& disc);
-    void setAnnualHours(int hours);
+    void setYearlyHours(unsigned int hours);
     void setGroups(const std::vector<std::string>& grps);
-    void setYearsOfExperience(int experience);
+    void setWorkExperience(unsigned int exp);
 
+    // Additional methods
     void addDiscipline(const std::string& discipline);
     void removeDiscipline(const std::string& discipline);
     void addGroup(const std::string& group);
     void removeGroup(const std::string& group);
 
 
-    virtual void printInfo(std::ostream& os) const {
-        os << "Teaching Info:\n"
-            << "  Disciplines: ";
-        for (const auto& disc : disciplines) {
-            os << disc << ", ";
-        }
-        os << "\n  Annual Hours: " << annualHours << "\n"
-            << "  Years of Experience: " << yearsOfExperience;
-    }
 
+
+
+    // In Teacher.h, ensure these declarations exist in the class body
     friend std::ostream& operator<<(std::ostream& os, const Teacher& teacher);
+    friend std::istream& operator>>(std::istream& is, Teacher& teacher);
+
+
+    // Add virtual method declaration
+    virtual void displayInfo() const;
 };
