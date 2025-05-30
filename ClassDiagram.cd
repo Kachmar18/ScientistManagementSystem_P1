@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Article" Collapsed="true">
+    <Position X="2.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAQAAAAAAQgAEBAAAAAAQAAgARCgAAA=</HashCode>
+      <FileName>Article.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ResearchTeachingStaff" Collapsed="true">
+    <Position X="5.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIABEAAQAEBAAIAAAEAgAIAAAQAIgCUAQAAA=</HashCode>
+      <FileName>ResearchTeachingStaff.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scientist" Collapsed="true">
+    <Position X="4.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wAACAAAAAAAkQAIgQBACAAIAACAAMAAAAAAgAIAAAAA=</HashCode>
+      <FileName>Scientist.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Teacher" Collapsed="true">
+    <Position X="7.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAEiAAAAAABAQAQAEBABEGAAAAAAAACAIEAiFAAABAA=</HashCode>
+      <FileName>Teacher.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaffContainer" Collapsed="true">
+    <Position X="1.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAEACAAAAAAEAAAAAAAAwAAAAAABAAAAQAAADAAA=</HashCode>
+      <FileName>StaffContainer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="AcademicDegree" Collapsed="true">
+    <Position X="0.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAUAAAAAAAAAAAQBAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>AcademicDegree.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

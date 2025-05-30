@@ -27,51 +27,92 @@ void addStaffMember(StaffContainer& container) {
     ResearchTeachingStaff staff;
     std::string input;
 
-    // Personal info
-    std::cout << "Enter last name: ";
+    // Зчитування даних
+    std::cout << "Enter full name (Last First Middle): ";
     std::getline(std::cin, input);
-    staff.setLastName(input);
 
-    std::cout << "Enter first name: ";
+    // Наукові дані
+    std::vector<Article> pubs;
+    int presentations, patents;
+    AcademicDegree deg;
+
+    std::cout << "Enter number of conference presentations: ";
+    std::cin >> presentations;
+
+    std::cout << "Enter number of patents: ";
+    std::cin >> patents;
+
+    std::cout << "Enter academic degree (0-4): ";
+    int degree;
+    std::cin >> degree;
+    deg = static_cast<AcademicDegree>(degree);
+
+    std::cin.ignore(); // Очистка буфера
+
+    // Педагогічні дані
+    std::vector<std::string> disciplines, groups;
+    unsigned int hours, exp;
+
+    std::cout << "Enter disciplines (comma separated): ";
     std::getline(std::cin, input);
-    staff.setFirstName(input);
+    std::stringstream ss(input);
+    std::string item;
+    while (std::getline(ss, item, ',')) {
+        item.erase(0, item.find_first_not_of(" \t"));
+        item.erase(item.find_last_not_of(" \t") + 1);
+        if (!item.empty()) disciplines.push_back(item);
+    }
 
-    std::cout << "Enter middle name: ";
+    std::cout << "Enter yearly hours: ";
+    std::cin >> hours;
+
+    std::cout << "Enter groups (comma separated): ";
+    std::cin.ignore();
     std::getline(std::cin, input);
-    staff.setMiddleName(input);
+    ss.clear();
+    ss.str(input);
+    while (std::getline(ss, item, ',')) {
+        item.erase(0, item.find_first_not_of(" \t"));
+        item.erase(item.find_last_not_of(" \t") + 1);
+        if (!item.empty()) groups.push_back(item);
+    }
 
-    // Scientific info
-    std::cout << "Enter scientific information (use operator>>):\n";
-    std::cin >> static_cast<Scientist&>(staff);
+    std::cout << "Enter work experience (years): ";
+    std::cin >> exp;
+    std::cin.ignore();
 
-    // Teaching info
-    std::cout << "Enter teaching information (use operator>>):\n";
-    std::cin >> static_cast<Teacher&>(staff);
+
+    staff(input, pubs, presentations, patents, deg, disciplines, hours, groups, exp);
 
     container.addStaff(std::make_unique<ResearchTeachingStaff>(std::move(staff)));
     std::cout << "Staff member added successfully!\n";
 }
 
+
 void editEmployee(StaffContainer& container) {
     if (container.begin() == container.end()) {
-        std::cout << "No employees to edit. Please add employees first.\n";
+        std::cout << "No employees to edit.\n";
         return;
     }
 
-    // Показати список працівників для вибору
-    std::cout << "\n=== LIST OF EMPLOYEES ===\n";
     int index = 0;
-    for (auto it = container.begin(); it != container.end(); ++it, ++index) {
-        std::cout << index << ". " << it->getLastName() << " "
-            << it->getFirstName() << " " << it->getMiddleName() << "\n";
+    std::cout << "\n=== Employee List ===\n";
+    for (const auto& staff : container) {
+        std::cout << index++ << ". " << staff.getFullName() << "\n";
     }
 
-    std::cout << "Enter employee number to edit: ";
+    // Вибір працівника з перевіркою
     int employeeNum;
-    std::cin >> employeeNum;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cout << "Enter employee number to edit: ";
+    if (!(std::cin >> employeeNum) || employeeNum < 0 || employeeNum >= index) {
+        std::cin.clear();
+        std::cin.ignore();
+        std::cout << "Invalid selection.\n";
+        return;
+    }
+    std::cin.ignore();
 
-    // Визначаємо кількість працівників
+
     int count = 0;
     for (auto it = container.begin(); it != container.end(); ++it) {
         count++;
@@ -82,14 +123,13 @@ void editEmployee(StaffContainer& container) {
         return;
     }
 
-    // Знаходимо працівника за індексом
     auto it = container.begin();
     for (int i = 0; i < employeeNum; ++i) {
         ++it;
     }
     ResearchTeachingStaff& staff = *it;
 
-    // Меню редагування
+ 
     std::cout << "\n=== EDITING EMPLOYEE ===\n"
         << "1. Edit personal information\n"
         << "2. Edit scientific information\n"
@@ -187,7 +227,7 @@ void writeToFile(const StaffContainer& container) {
     }
 }
 
-// Add this overload before the main function
+
 void demonstratePolymorphism(Scientist* sci) {
     sci->displayInfo();  // Late binding demonstration
 }
@@ -200,69 +240,73 @@ void demonstratePolymorphism(StaffContainer& container) {
 
     std::cout << "\n=== POLYMORPHISM DEMONSTRATION ===\n";
 
-    // 1. Virtual methods
-    std::cout << "\n1. Virtual methods (displayInfo()):\n";
-    std::cout << "Call through derived class object:\n";
-    (*container.begin()).displayInfo();
+    auto& firstStaff = *container.begin();
 
-    // 2. Late binding through base class pointers
+    // 1. Виклик віртуального методу безпосередньо
+    std::cout << "\n1. Direct virtual method call:\n";
+    firstStaff.displayInfo();
+
+    // 2. Пізнє зв'язування через вказівники на базові класи
     std::cout << "\n2. Late binding through base class pointers:\n";
 
-    // Create vector of base class pointers
-    std::vector<Scientist*> scientists;
-    std::vector<Teacher*> teachers;
 
-    for (auto it = container.begin(); it != container.end(); ++it) {
-        scientists.push_back(&(*it));  // As Scientist*
-        teachers.push_back(&(*it));    // As Teacher*
-    }
+    Scientist* sciPtr = &firstStaff;
+    Teacher* teachPtr = &firstStaff;
 
     std::cout << "Call through Scientist* pointer:\n";
-    scientists[0]->displayInfo();
+    sciPtr->displayInfo();
 
     std::cout << "\nCall through Teacher* pointer:\n";
-    teachers[0]->displayInfo();
+    teachPtr->displayInfo();
 
-    // 3. Demonstration through function
+    // 3. Демонстрація через функцію, що приймає базовий клас
     std::cout << "\n3. Demonstration through function accepting Scientist*:\n";
-    demonstratePolymorphism(scientists[0]);
+    demonstratePolymorphism(sciPtr);
 }
+
 
 
 int main() {
     StaffContainer container;
-    int choice = 0;
+    int choice = -1;
 
-    do {
+    while (choice != 0) {
         displayMenu();
-        std::cin >> choice;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        
+        if (!(std::cin >> choice)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please try again.\n";
+            continue;
+        }
+        std::cin.ignore();
 
         switch (choice) {
-        case 1: addStaffMember(container); break;
-        case 2:
-            std::cout << "\n=== ALL STAFF MEMBERS ===\n";
-            for (auto it = container.begin(); it != container.end(); ++it) {
-                std::cout << *it << "\n---\n";
-            }
-            break;
-        case 3: searchByDiscipline(container); break;
-        case 4:
-            std::cout << "Average workload: "
-                << container.calculateAverageWorkload() << " hours\n";
-            break;
-        case 5:
-            std::cout << "Average length of service: "
-                << container.calculateAverageExperience() << " years\n";
-            break;
-        case 6: readFromFile(container); break;
-        case 7: writeToFile(container); break;
-        case 8: editEmployee(container); break;  // Новий пункт меню
-        case 9: demonstratePolymorphism(container); break;
-        case 10: std::cout << "Exiting program...\n"; break;
-        default: std::cout << "Invalid choice. Please try again.\n";
+            case 1: addStaffMember(container); break;
+            case 2: 
+                std::cout << "\n=== All Staff ===" << std::endl;
+                for (const auto& staff : container) {
+                    std::cout << staff << "\n---\n";
+                }
+
+                break;
+            case 3: searchByDiscipline(container); break;
+            case 4:
+                std::cout << "Average workload: " 
+                          << container.calculateAverageWorkload() << " hours\n";
+                break;
+            case 5:
+                std::cout << "Average experience: "
+                          << container.calculateAverageExperience() << " years\n";
+                break;
+            case 6: readFromFile(container); break;
+            case 7: writeToFile(container); break;
+            case 8: editEmployee(container); break;
+            case 9: demonstratePolymorphism(container); break;
+            case 0: std::cout << "Exiting program...\n"; break;
+            default: std::cout << "Invalid choice. Try again.\n";
         }
-    } while (choice != 10);
+    }
 
     return 0;
 }

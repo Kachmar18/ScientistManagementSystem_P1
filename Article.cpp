@@ -1,8 +1,12 @@
 #include "Article.h"
+#include <stdexcept>
 
 Article::Article(const std::vector<std::string>& auth, const std::string& journal,
     const std::string& title, int year)
-    : authors(auth), journalTitle(journal), articleTitle(title), publicationYear(year) {}
+    : authors(auth), journalTitle(journal), articleTitle(title) {
+    setPublicationYear(year);
+}
+
 
 Article::Article(const Article& other)
     : authors(other.authors), journalTitle(other.journalTitle),
@@ -14,7 +18,6 @@ Article::Article(Article&& other) noexcept
 
 Article::~Article() {}
 
-// Assignment operators
 Article& Article::operator=(const Article& other) {
     if (this != &other) {
         authors = other.authors;
@@ -35,15 +38,22 @@ Article& Article::operator=(Article&& other) noexcept {
     return *this;
 }
 
-
-// Getters
 const std::vector<std::string>& Article::getAuthors() const { return authors; }
 std::string Article::getJournalTitle() const { return journalTitle; }
 std::string Article::getArticleTitle() const { return articleTitle; }
 int Article::getPublicationYear() const { return publicationYear; }
 
-// Setters
+
 void Article::setAuthors(const std::vector<std::string>& auth) { authors = auth; }
 void Article::setJournalTitle(const std::string& journal) { journalTitle = journal; }
 void Article::setArticleTitle(const std::string& title) { articleTitle = title; }
-void Article::setPublicationYear(int year) { publicationYear = year; }
+void Article::setPublicationYear(int year) {
+    if (!isValidYear(year))
+        throw std::invalid_argument("Invalid publication year");
+    publicationYear = year;
+}
+
+
+bool Article::isValidYear(int year) const {
+    return (year >= 2000 && year <= 2025);
+}

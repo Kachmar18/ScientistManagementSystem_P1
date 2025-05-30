@@ -2,7 +2,6 @@
 #include <sstream>
 #include <iostream>
 
-// Constructor
 ResearchTeachingStaff::ResearchTeachingStaff(
     const std::string& last,
     const std::string& first,
@@ -21,7 +20,57 @@ lastName(last),
 firstName(first),
 middleName(middle) {}
 
-// Copy constructor
+
+ResearchTeachingStaff& ResearchTeachingStaff::operator()(
+    const std::string& fullName,
+    const std::vector<Article>& pubs,
+    int presentations,
+    int patents,
+    AcademicDegree deg,
+    const std::vector<std::string>& disc,
+    unsigned int hours,
+    const std::vector<std::string>& grps,
+    unsigned int exp
+    ) {
+    // Розбиваємо повне ім'я на частини
+    std::istringstream iss(fullName);
+    std::vector<std::string> nameParts;
+    std::string part;
+
+    while (iss >> part) {
+        nameParts.push_back(part);
+    }
+
+    if (nameParts.size() >= 3) {
+        lastName = nameParts[0];
+        firstName = nameParts[1];
+        middleName = nameParts[2];
+    }
+    else if (nameParts.size() == 2) {
+        lastName = nameParts[0];
+        firstName = nameParts[1];
+        middleName = "";
+    }
+    else if (!nameParts.empty()) {
+        lastName = nameParts[0];
+    }
+
+    // Ініціалізація наукових даних з перевірками
+    setPublications(pubs);
+    setConferencePresentations(std::max(0, presentations));
+    setPatentsCount(std::max(0, patents));
+    setAcademicDegree(deg);
+
+    // Ініціалізація педагогічних даних з перевірками
+    setDisciplines(disc);
+    setYearlyHours(hours);
+    setGroups(grps);
+    setWorkExperience(exp);
+
+    return *this;
+}
+
+
 ResearchTeachingStaff::ResearchTeachingStaff(const ResearchTeachingStaff& other)
     : Scientist(other),
     Teacher(other),
@@ -29,7 +78,6 @@ ResearchTeachingStaff::ResearchTeachingStaff(const ResearchTeachingStaff& other)
     firstName(other.firstName),
     middleName(other.middleName) {}
 
-// Move constructor
 ResearchTeachingStaff::ResearchTeachingStaff(ResearchTeachingStaff&& other) noexcept
     : Scientist(std::move(other)),
     Teacher(std::move(other)),
@@ -37,10 +85,9 @@ ResearchTeachingStaff::ResearchTeachingStaff(ResearchTeachingStaff&& other) noex
     firstName(std::move(other.firstName)),
     middleName(std::move(other.middleName)) {}
 
-// Destructor
 ResearchTeachingStaff::~ResearchTeachingStaff() {}
 
-// Assignment operators
+
 ResearchTeachingStaff& ResearchTeachingStaff::operator=(const ResearchTeachingStaff& other) {
     if (this != &other) {
         Scientist::operator=(other);
@@ -63,7 +110,7 @@ ResearchTeachingStaff& ResearchTeachingStaff::operator=(ResearchTeachingStaff&& 
     return *this;
 }
 
-// In ResearchTeachingStaff.cpp
+
 std::ostream& operator<<(std::ostream& os, const ResearchTeachingStaff& rts) {
     os << "Name: " << rts.getFullName() << "\n";
     os << "--- Scientific Information ---\n";
@@ -90,22 +137,15 @@ std::istream& operator>>(std::istream& is, ResearchTeachingStaff& rts) {
     return is;
 }
 
-// Getters
+
+
 std::string ResearchTeachingStaff::getLastName() const { return lastName; }
 std::string ResearchTeachingStaff::getFirstName() const { return firstName; }
 std::string ResearchTeachingStaff::getMiddleName() const { return middleName; }
 
-// Setters
 void ResearchTeachingStaff::setLastName(const std::string& last) { lastName = last; }
 void ResearchTeachingStaff::setFirstName(const std::string& first) { firstName = first; }
 void ResearchTeachingStaff::setMiddleName(const std::string& middle) { middleName = middle; }
-
-// Combined information
-std::string ResearchTeachingStaff::getFullName() const {
-    std::ostringstream oss;
-    oss << lastName << " " << firstName << " " << middleName;
-    return oss.str();
-}
 
 
 void ResearchTeachingStaff::displayInfo() const {

@@ -10,7 +10,6 @@ private:
     std::string middleName;
 
 public:
-    // In ResearchTeachingStaff.h
     ResearchTeachingStaff(
         const std::string& last = "",
         const std::string& first = "",
@@ -25,52 +24,45 @@ public:
         unsigned int exp = 0
     );
 
-    // Copy constructor
-    ResearchTeachingStaff(const ResearchTeachingStaff& other);
+    ResearchTeachingStaff& operator()(
+        const std::string& fullName,  // "Прізвище Ім'я По-батькові"
+        const std::vector<Article>& pubs,
+        int presentations,
+        int patents,
+        AcademicDegree deg,
+        const std::vector<std::string>& disc,
+        unsigned int hours,
+        const std::vector<std::string>& grps,
+        unsigned int exp
+        );
 
-    // Move constructor
+    ResearchTeachingStaff(const ResearchTeachingStaff& other);
     ResearchTeachingStaff(ResearchTeachingStaff&& other) noexcept;
 
-    // Destructor
     ~ResearchTeachingStaff();
 
-    // Assignment operators
     ResearchTeachingStaff& operator=(const ResearchTeachingStaff& other);
     ResearchTeachingStaff& operator=(ResearchTeachingStaff&& other) noexcept;
 
-    // Stream operators
-    friend std::ostream& operator<<(std::ostream& os, const ResearchTeachingStaff& rts);
-    friend std::istream& operator>>(std::istream& is, ResearchTeachingStaff& rts);
-
-    // Getters
     std::string getLastName() const;
     std::string getFirstName() const;
     std::string getMiddleName() const;
 
-    // Setters
     void setLastName(const std::string& last);
     void setFirstName(const std::string& first);
     void setMiddleName(const std::string& middle);
 
-    // Combined information methods
-    std::string getFullName() const;
+    std::string getFullName() const {
+        return lastName + " " + firstName + " " + middleName;
+    }
 
-
-
-
-    // Override virtual method
-    void displayInfo() const override;
-
-
-
-
-    // Add these method declarations
     void serialize(std::ostream& os) const;
     void deserialize(std::istream& is);
 
 
-
     friend std::ostream& operator<<(std::ostream& os, const ResearchTeachingStaff& rts);
     friend std::istream& operator>>(std::istream& is, ResearchTeachingStaff& rts);
+
+    void displayInfo() const override;
 
 };

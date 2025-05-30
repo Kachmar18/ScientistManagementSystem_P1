@@ -11,39 +11,28 @@ private:
     AcademicDegree degree;
 
 public:
-    // Add default constructor
     Scientist();
 
-    // Constructors
     Scientist(const std::vector<Article>& pubs, int presentations,
         int patents, AcademicDegree deg);
-
-    // Copy constructor
     Scientist(const Scientist& other);
-
-    // Move constructor
     Scientist(Scientist&& other) noexcept;
 
-    // Destructor
     ~Scientist();
 
-    // Assignment operators
     Scientist& operator=(const Scientist& other);
     Scientist& operator=(Scientist&& other) noexcept;
 
-    // Getters
     const std::vector<Article>& getPublications() const;
     int getConferencePresentations() const;
     int getPatentsCount() const;
     AcademicDegree getAcademicDegree() const;
 
-    // Setters
     void setPublications(const std::vector<Article>& pubs);
     void setConferencePresentations(int presentations);
     void setPatentsCount(int patents);
     void setAcademicDegree(AcademicDegree deg);
 
-    // Additional methods
     void addPublication(const Article& article);
     void removePublication(int index);
 
@@ -51,8 +40,5 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Scientist& scientist);
     friend std::istream& operator>>(std::istream& is, Scientist& scientist);
 
-
-
-    // Add virtual method declaration
     virtual void displayInfo() const;
 };

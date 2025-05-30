@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <stdexcept> 
 
 class Article {
 private:
@@ -9,31 +10,25 @@ private:
     std::string articleTitle;
     int publicationYear;
 
+    bool isValidYear(int year) const;
+
 public:
-    // Constructors
     Article(const std::vector<std::string>& auth, const std::string& journal,
         const std::string& title, int year);
 
-    // Copy constructor
     Article(const Article& other);
-
-    // Move constructor
     Article(Article&& other) noexcept;
 
-    // Destructor
     ~Article();
 
-    // Assignment operators
     Article& operator=(const Article& other);
     Article& operator=(Article&& other) noexcept;
 
-    // Getters
     const std::vector<std::string>& getAuthors() const;
     std::string getJournalTitle() const;
     std::string getArticleTitle() const;
     int getPublicationYear() const;
 
-    // Setters
     void setAuthors(const std::vector<std::string>& auth);
     void setJournalTitle(const std::string& journal);
     void setArticleTitle(const std::string& title);

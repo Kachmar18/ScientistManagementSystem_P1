@@ -6,7 +6,6 @@
 Teacher::Teacher()
     : yearlyHours(0), workExperience(0) {}
 
-// Parameterized constructor
 Teacher::Teacher(const std::vector<std::string>& disc, unsigned int hours,
     const std::vector<std::string>& grps, unsigned int exp)
     : disciplines(disc), yearlyHours(hours), groups(grps), workExperience(exp) {}
@@ -23,8 +22,6 @@ Teacher::~Teacher() {}
 
 
 
-
-// Assignment operators
 Teacher& Teacher::operator=(const Teacher& other) {
     if (this != &other) {
         disciplines = other.disciplines;
@@ -44,7 +41,17 @@ Teacher& Teacher::operator=(Teacher&& other) noexcept {
     }
     return *this;
 }
-// Add these implementations to Teacher.cpp if not present
+
+Teacher& Teacher::operator()(const std::vector<std::string>& disc, unsigned int hours,
+    const std::vector<std::string>& grps, unsigned int exp) {
+    disciplines = disc;
+    yearlyHours = hours;
+    groups = grps;
+    workExperience = exp;
+    return *this;
+}
+
+
 std::ostream& operator<<(std::ostream& os, const Teacher& teacher) {
     os << "Disciplines: ";
     for (const auto& disc : teacher.getDisciplines()) {
@@ -75,14 +82,12 @@ std::istream& operator>>(std::istream& is, Teacher& teacher) {
     }
     teacher.setDisciplines(disciplines);
 
-    // Read yearly hours
     std::cout << "Enter yearly hours: ";
     unsigned int hours;
     is >> hours;
     teacher.setYearlyHours(hours);
     is.ignore(); // ignore newline
 
-    // Read groups
     std::cout << "Enter groups (comma separated): ";
     std::getline(is, line);
     std::vector<std::string> groups;
@@ -96,12 +101,11 @@ std::istream& operator>>(std::istream& is, Teacher& teacher) {
     }
     teacher.setGroups(groups);
 
-    // Read work experience
     std::cout << "Enter work experience (years): ";
     unsigned int exp;
     is >> exp;
     teacher.setWorkExperience(exp);
-    is.ignore(); // ignore newline
+    is.ignore();
 
     return is;
 }
@@ -109,22 +113,19 @@ std::istream& operator>>(std::istream& is, Teacher& teacher) {
 
 
 
-
-
-
-// Getters
 const std::vector<std::string>& Teacher::getDisciplines() const { return disciplines; }
 unsigned int Teacher::getYearlyHours() const { return yearlyHours; }
 const std::vector<std::string>& Teacher::getGroups() const { return groups; }
 unsigned int Teacher::getWorkExperience() const { return workExperience; }
 
-// Setters
 void Teacher::setDisciplines(const std::vector<std::string>& disc) { disciplines = disc; }
 void Teacher::setYearlyHours(unsigned int hours) { yearlyHours = hours; }
 void Teacher::setGroups(const std::vector<std::string>& grps) { groups = grps; }
 void Teacher::setWorkExperience(unsigned int exp) { workExperience = exp; }
 
-// Additional methods
+
+
+
 void Teacher::addDiscipline(const std::string& discipline) {
     if (std::find(disciplines.begin(), disciplines.end(), discipline) == disciplines.end()) {
         disciplines.push_back(discipline);

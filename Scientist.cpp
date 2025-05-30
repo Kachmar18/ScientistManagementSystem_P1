@@ -2,7 +2,6 @@
 #include <iostream>
 #include <sstream>
 
-// Implement default constructor
 Scientist::Scientist()
     : conferencePresentations(0), patentsCount(0), degree(AcademicDegree::NONE) {}
 
@@ -22,7 +21,6 @@ Scientist::Scientist(Scientist&& other) noexcept
 
 Scientist::~Scientist() {}
 
-// Assignment operators
 Scientist& Scientist::operator=(const Scientist& other) {
     if (this != &other) {
         publications = other.publications;
@@ -43,13 +41,14 @@ Scientist& Scientist::operator=(Scientist&& other) noexcept {
     return *this;
 }
 
-// Getters
+
+
+
 const std::vector<Article>& Scientist::getPublications() const { return publications; }
 int Scientist::getConferencePresentations() const { return conferencePresentations; }
 int Scientist::getPatentsCount() const { return patentsCount; }
 AcademicDegree Scientist::getAcademicDegree() const { return degree; }
 
-// Setters
 void Scientist::setPublications(const std::vector<Article>& pubs) { publications = pubs; }
 void Scientist::setConferencePresentations(int presentations) {
     conferencePresentations = presentations;
@@ -57,7 +56,10 @@ void Scientist::setConferencePresentations(int presentations) {
 void Scientist::setPatentsCount(int patents) { patentsCount = patents; }
 void Scientist::setAcademicDegree(AcademicDegree deg) { degree = deg; }
 
-// Additional methods
+
+
+
+
 void Scientist::addPublication(const Article& article) {
     publications.push_back(article);
 }
@@ -68,7 +70,8 @@ void Scientist::removePublication(int index) {
     }
 }
 
-// Stream operators
+
+
 std::ostream& operator<<(std::ostream& os, const Scientist& scientist) {
     os << "Publications:\n";
     for (const auto& pub : scientist.getPublications()) {
@@ -88,14 +91,13 @@ std::ostream& operator<<(std::ostream& os, const Scientist& scientist) {
 }
 
 std::istream& operator>>(std::istream& is, Scientist& scientist) {
-    // Clear existing publications
     scientist.setPublications({});
 
     std::cout << "Enter scientific information:\n";
     std::cout << "Number of publications: ";
     int pubCount;
     is >> pubCount;
-    is.ignore(); // Clear newline
+    is.ignore();
 
     for (int i = 0; i < pubCount; ++i) {
         std::vector<std::string> authors;
@@ -122,7 +124,7 @@ std::istream& operator>>(std::istream& is, Scientist& scientist) {
 
         std::cout << "Publication year: ";
         is >> year;
-        is.ignore(); // Clear newline
+        is.ignore();
 
         scientist.addPublication(Article(authors, journal, title, year));
     }
@@ -131,24 +133,24 @@ std::istream& operator>>(std::istream& is, Scientist& scientist) {
     int presentations;
     is >> presentations;
     scientist.setConferencePresentations(presentations);
-    is.ignore(); // Clear newline
+    is.ignore();
 
     std::cout << "Number of patents: ";
     int patents;
     is >> patents;
     scientist.setPatentsCount(patents);
-    is.ignore(); // Clear newline
+    is.ignore();
 
     std::cout << "Academic degree (0=None, 1=Candidate Tech, 2=Candidate PhysMath, 3=PhD, 4=Doctor Tech): ";
     int degree;
     is >> degree;
     scientist.setAcademicDegree(static_cast<AcademicDegree>(degree));
-    is.ignore(); // Clear newline
+    is.ignore();
 
     return is;
 }
 
-// displayInfo implementation at file scope
+
 void Scientist::displayInfo() const {
     std::cout << "--- Scientific Information ---\n";
     std::cout << "Publications: " << getPublications().size() << "\n";

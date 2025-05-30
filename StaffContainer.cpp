@@ -4,7 +4,6 @@
 #include <iostream>
 #include <fstream>
 
-// Iterator implementation
 StaffContainer::Iterator::Iterator(std::vector<std::unique_ptr<ResearchTeachingStaff>>::iterator iterator)
     : it(iterator) {}
 
@@ -27,8 +26,6 @@ bool StaffContainer::Iterator::operator==(const Iterator& other) const {
     return it == other.it;
 }
 
-
-
 ResearchTeachingStaff& StaffContainer::Iterator::operator*() const {
     return **it;
 }
@@ -37,7 +34,6 @@ ResearchTeachingStaff* StaffContainer::Iterator::operator->() const {
     return it->get();
 }
 
-// Container implementation
 void StaffContainer::addStaff(std::unique_ptr<ResearchTeachingStaff> staff) {
     staffMembers.push_back(std::move(staff));
 }
