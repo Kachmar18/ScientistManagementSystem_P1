@@ -51,9 +51,15 @@ AcademicDegree Scientist::getAcademicDegree() const { return degree; }
 
 void Scientist::setPublications(const std::vector<Article>& pubs) { publications = pubs; }
 void Scientist::setConferencePresentations(int presentations) {
+    if (presentations < 0) throw std::invalid_argument("Number of presentations cannot be negative");
     conferencePresentations = presentations;
 }
-void Scientist::setPatentsCount(int patents) { patentsCount = patents; }
+
+void Scientist::setPatentsCount(int patents) {
+    if (patents < 0) throw std::invalid_argument("Number of patents cannot be negative");
+    patentsCount = patents;
+}
+
 void Scientist::setAcademicDegree(AcademicDegree deg) { degree = deg; }
 
 

@@ -12,80 +12,30 @@ void displayMenu() {
         << "3. Search for employees by discipline\n"
         << "4. Display the average workload\n"
         << "5. Display the average length of service\n"
-        << "6. Read employees from the file\n"
-        << "7. Write employees to the file\n"
-        << "8. Edit an employee\n"  // Новий пункт меню
-        << "9. Demonstration of polymorphism\n"
+        << "6. Edit an employee\n"  // Новий пункт меню
+        << "7. Demonstration of polymorphism\n"
+        << "8. Read employees from the file\n"
+        << "9. Write employees to the file\n"
         << "10. End the programme\n"
         << "========================================\n"
         << "Enter your choice: ";
 }
 
 void addStaffMember(StaffContainer& container) {
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    ResearchTeachingStaff staff;
-    std::string input;
-
-    // Зчитування даних
-    std::cout << "Enter full name (Last First Middle): ";
-    std::getline(std::cin, input);
-
-    // Наукові дані
-    std::vector<Article> pubs;
-    int presentations, patents;
-    AcademicDegree deg;
-
-    std::cout << "Enter number of conference presentations: ";
-    std::cin >> presentations;
-
-    std::cout << "Enter number of patents: ";
-    std::cin >> patents;
-
-    std::cout << "Enter academic degree (0-4): ";
-    int degree;
-    std::cin >> degree;
-    deg = static_cast<AcademicDegree>(degree);
-
-    std::cin.ignore(); // Очистка буфера
-
-    // Педагогічні дані
-    std::vector<std::string> disciplines, groups;
-    unsigned int hours, exp;
-
-    std::cout << "Enter disciplines (comma separated): ";
-    std::getline(std::cin, input);
-    std::stringstream ss(input);
-    std::string item;
-    while (std::getline(ss, item, ',')) {
-        item.erase(0, item.find_first_not_of(" \t"));
-        item.erase(item.find_last_not_of(" \t") + 1);
-        if (!item.empty()) disciplines.push_back(item);
+    while (true) {
+        try {
+            ResearchTeachingStaff staff;
+            std::cin >> staff;  // тут усі set* викличуть перевірки
+            container.addStaff(std::make_unique<ResearchTeachingStaff>(std::move(staff)));
+            std::cout << "Staff member added successfully!\n";
+            break;  // вийти з циклу, якщо все пройшло успішно
+        }
+        catch (const std::invalid_argument& e) {
+            std::cerr << "Input error: " << e.what() << " Please try again.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
     }
-
-    std::cout << "Enter yearly hours: ";
-    std::cin >> hours;
-
-    std::cout << "Enter groups (comma separated): ";
-    std::cin.ignore();
-    std::getline(std::cin, input);
-    ss.clear();
-    ss.str(input);
-    while (std::getline(ss, item, ',')) {
-        item.erase(0, item.find_first_not_of(" \t"));
-        item.erase(item.find_last_not_of(" \t") + 1);
-        if (!item.empty()) groups.push_back(item);
-    }
-
-    std::cout << "Enter work experience (years): ";
-    std::cin >> exp;
-    std::cin.ignore();
-
-
-    staff(input, pubs, presentations, patents, deg, disciplines, hours, groups, exp);
-
-    container.addStaff(std::make_unique<ResearchTeachingStaff>(std::move(staff)));
-    std::cout << "Staff member added successfully!\n";
 }
 
 
@@ -101,7 +51,6 @@ void editEmployee(StaffContainer& container) {
         std::cout << index++ << ". " << staff.getFullName() << "\n";
     }
 
-    // Вибір працівника з перевіркою
     int employeeNum;
     std::cout << "Enter employee number to edit: ";
     if (!(std::cin >> employeeNum) || employeeNum < 0 || employeeNum >= index) {
@@ -112,24 +61,12 @@ void editEmployee(StaffContainer& container) {
     }
     std::cin.ignore();
 
-
-    int count = 0;
-    for (auto it = container.begin(); it != container.end(); ++it) {
-        count++;
-    }
-
-    if (employeeNum < 0 || employeeNum >= count) {
-        std::cout << "Invalid employee number.\n";
-        return;
-    }
-
     auto it = container.begin();
     for (int i = 0; i < employeeNum; ++i) {
         ++it;
     }
     ResearchTeachingStaff& staff = *it;
 
- 
     std::cout << "\n=== EDITING EMPLOYEE ===\n"
         << "1. Edit personal information\n"
         << "2. Edit scientific information\n"
@@ -143,27 +80,28 @@ void editEmployee(StaffContainer& container) {
 
     switch (editChoice) {
     case 1: {
-        std::string lastName, firstName, middleName;
-        std::cout << "Enter new last name: ";
-        std::getline(std::cin, lastName);
-        std::cout << "Enter new first name: ";
-        std::getline(std::cin, firstName);
-        std::cout << "Enter new middle name: ";
-        std::getline(std::cin, middleName);
-
-        staff.setLastName(lastName);
-        staff.setFirstName(firstName);
-        staff.setMiddleName(middleName);
+        std::cout << "Enter new personal information:\n";
+        // Прямо вводимо частину персональної інформації
+        std::string last, first, middle;
+        std::cout << "Last name: ";
+        std::getline(std::cin, last);
+        std::cout << "First name: ";
+        std::getline(std::cin, first);
+        std::cout << "Middle name: ";
+        std::getline(std::cin, middle);
+        staff.setLastName(last);
+        staff.setFirstName(first);
+        staff.setMiddleName(middle);
         break;
     }
     case 2: {
         std::cout << "Enter new scientific information:\n";
-        std::cin >> static_cast<Scientist&>(staff);
+        std::cin >> static_cast<Scientist&>(staff);  // використовуємо вже готовий operator>>
         break;
     }
     case 3: {
         std::cout << "Enter new teaching information:\n";
-        std::cin >> static_cast<Teacher&>(staff);
+        std::cin >> static_cast<Teacher&>(staff);  // використовуємо готовий operator>>
         break;
     }
     case 4:
@@ -176,6 +114,7 @@ void editEmployee(StaffContainer& container) {
 
     std::cout << "Employee information updated successfully!\n";
 }
+
 
 
 void searchByDiscipline(const StaffContainer& container) {
@@ -228,9 +167,7 @@ void writeToFile(const StaffContainer& container) {
 }
 
 
-void demonstratePolymorphism(Scientist* sci) {
-    sci->displayInfo();  // Late binding demonstration
-}
+
 
 void demonstratePolymorphism(StaffContainer& container) {
     if (container.begin() == container.end()) {
@@ -238,31 +175,28 @@ void demonstratePolymorphism(StaffContainer& container) {
         return;
     }
 
-    std::cout << "\n=== POLYMORPHISM DEMONSTRATION ===\n";
+    std::cout << "\n=== Demonstrating late binding with a single pointer ===\n";
 
+    Scientist* ptr = nullptr;
+
+    Scientist baseScientist;
+    ptr = &baseScientist;
+
+    std::cout << "Pointing Scientist* to a Scientist object:\n";
+    ptr->displayInfo();
+
+    std::cout << "\n";
+
+    // Тепер вказуємо на об’єкт похідного класу ResearchTeachingStaff
     auto& firstStaff = *container.begin();
+    ptr = &firstStaff;
 
-    // 1. Виклик віртуального методу безпосередньо
-    std::cout << "\n1. Direct virtual method call:\n";
-    firstStaff.displayInfo();
+    std::cout << "Now pointing Scientist* to a ResearchTeachingStaff object:\n";
+    ptr->displayInfo();
 
-    // 2. Пізнє зв'язування через вказівники на базові класи
-    std::cout << "\n2. Late binding through base class pointers:\n";
-
-
-    Scientist* sciPtr = &firstStaff;
-    Teacher* teachPtr = &firstStaff;
-
-    std::cout << "Call through Scientist* pointer:\n";
-    sciPtr->displayInfo();
-
-    std::cout << "\nCall through Teacher* pointer:\n";
-    teachPtr->displayInfo();
-
-    // 3. Демонстрація через функцію, що приймає базовий клас
-    std::cout << "\n3. Demonstration through function accepting Scientist*:\n";
-    demonstratePolymorphism(sciPtr);
+    std::cout << "\n";
 }
+
 
 
 
@@ -299,10 +233,10 @@ int main() {
                 std::cout << "Average experience: "
                           << container.calculateAverageExperience() << " years\n";
                 break;
-            case 6: readFromFile(container); break;
-            case 7: writeToFile(container); break;
-            case 8: editEmployee(container); break;
-            case 9: demonstratePolymorphism(container); break;
+            case 6: editEmployee(container); break;
+            case 7: demonstratePolymorphism(container); break;
+            case 8: readFromFile(container); break;
+            case 9: writeToFile(container); break;
             case 0: std::cout << "Exiting program...\n"; break;
             default: std::cout << "Invalid choice. Try again.\n";
         }
