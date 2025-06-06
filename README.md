@@ -26,15 +26,14 @@ make
 ./main.cpp
 ```
 
-
 ## Формат даних
-- Вхід: текстові дані через std::cin
+- Вхід: текстові дані через std::cin, або зчитуваня з файлу у форматі .txt
 - Вихід: вивід у консоль та запис у .txt файл
 
 ## Додатково
-- UML-діаграма додана в [Додатку 1](https://drive.google.com/drive/folders/166VppwrMd5JoxZzhNVuo4EHBJLHOGiVf?usp=sharing)
-- Вихідний код записаний в [Додатку 3](https://drive.google.com/drive/folders/166VppwrMd5JoxZzhNVuo4EHBJLHOGiVf?usp=sharing)
+- UML-діаграма додана в [Додатку 1](https://drive.google.com/file/d/1dFEwmGiKhToCMxhO6o8F1pwcubKhzVdt/view?usp=sharing)
+- Вихідний код записаний в [Додатки 3-27](https://drive.google.com/file/d/1dFEwmGiKhToCMxhO6o8F1pwcubKhzVdt/view?usp=sharing)
 
 ---
 
-Розроблено в рамках курсової роботи
+Розроблено в рамках курсової роботи [Технічне завдання](https://docs.google.com/document/d/1jyeA8Fzg7uDy3Ude4M6PUQb08Sw1dalJ/edit?usp=sharing&ouid=113111089409960470576&rtpof=true&sd=true)
