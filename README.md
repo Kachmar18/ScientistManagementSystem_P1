@@ -32,7 +32,7 @@ make
 
 ## Додатково
 - UML-діаграма додана в [Додатку 1](https://drive.google.com/file/d/1dFEwmGiKhToCMxhO6o8F1pwcubKhzVdt/view?usp=sharing)
-- Вихідний код записаний в [Додатки 3-27](https://drive.google.com/file/d/1dFEwmGiKhToCMxhO6o8F1pwcubKhzVdt/view?usp=sharing)
+- Вихідний код записаний в [Додатки 3-14](https://drive.google.com/file/d/1dFEwmGiKhToCMxhO6o8F1pwcubKhzVdt/view?usp=sharing)
 
 ---
 
