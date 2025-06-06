@@ -188,8 +188,7 @@ void demonstratePolymorphism(StaffContainer& container) {
     std::cout << "\n";
 
     // Тепер вказуємо на об’єкт похідного класу ResearchTeachingStaff
-    auto& firstStaff = *container.begin();
-    ptr = &firstStaff;
+    ptr = &(*container.begin());
 
     std::cout << "Now pointing Scientist* to a ResearchTeachingStaff object:\n";
     ptr->displayInfo();
